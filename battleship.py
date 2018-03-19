@@ -45,12 +45,41 @@ def would_continue():
     if to_continue == "N" or to_continue == "n":
         sys.exit()
 
+def ship_num(board_dimension):
+    print "You will now choose a difficulty for the game"
+    print "Pick a decimal between 0 - 1 to decide how many hits/misses there will be"
+    print "Closer to 0 means less hits, closer to 1 means more hits"
+    difficulty = float(raw_input("give a number between 0 and 1: "))
+    num_ships = difficulty * (board_dimension ** 2)
+    return int(num_ships)
+
+def find_new_ship(board):
+    ship_row = random_row(board)
+    ship_col = random_col(board)
+    ship_location = [ship_row, ship_col]
+    return ship_location
+
+def ship_list(no_ships, board):
+    list_of_ships = []
+    for ship in range(no_ships):
+        ship_location = find_new_ship(board)
+        while ship_location in list_of_ships:
+            ship_location = find_new_ship(board)
+        list_of_ships.append(ship_location)
+    print list_of_ships
+    return list_of_ships
+
 def main():
     board = []
     board_size = int(raw_input("\nSize of board please: "))
 
+    ship_no = ship_num(board_size)
+    print ship_no
+
     for x in range(0, board_size):
         board.append(["O"] * board_size)
+
+    ship_list(ship_no, board)
 
     ship_row = random_row(board)
     ship_col = random_col(board)
@@ -58,6 +87,8 @@ def main():
 
     guess_row, guess_col = get_guess()
 
+#@todo need to change check_hit to take in ship_list
+#@todo how many ships are left to hit instead of quitting after hitting one
     guess_hit = check_hit(board, ship_row, guess_row, ship_col, guess_col, board_size)
 
     while guess_hit != True:
@@ -67,20 +98,5 @@ def main():
         guess_hit = check_hit(board, ship_row, guess_row, ship_col, guess_col, board_size)
 
     print_board(board)
-
-"""    if guess_row == ship_row and guess_col == ship_col:
-        print "Congratulations! You sank my battleship!"
-        board[guess_row][guess_col] = "X"
-    else:
-        if guess_row not in range(5) or \
-            guess_col not in range(5):
-            print "Oops, that's not even in the ocean."
-        elif board[guess_row][guess_col] == "X":
-            print "You guessed that one already."
-        else:
-            print "You missed my battleship!"
-            board[guess_row][guess_col] = "X"
-        print "Please guess again"
-"""
 
 main()
