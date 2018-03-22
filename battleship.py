@@ -1,4 +1,5 @@
 from random import randint
+from pprint import pprint
 import sys
 
 # Let's the user know what this jam is all about
@@ -10,8 +11,17 @@ def print_greeting():
 # A function that takes in the board as an argument and prints it
 def print_board(board):
     print("\nHere is your board:\n")
+
+    for i in range(len(board) + 1):
+        print(str(i) + " ", end="")
+
+    print("")
+
+    row_count = 1
+
     for row in board:
-        print(" ".join(row))
+        print(str(row_count) + " " + " ".join(row))
+        row_count += 1
 
 # A function that takes in the dimension of the board
 # and returns the users guess of ship location
@@ -47,13 +57,13 @@ def check_hit(board, list_guesses, list_ships, size_board):
         # If there are no more ships
         if list_ships == []:
             print("\nCongratulations! You sank all my ships! :P\n")
-            board[row_guess][col_guess] = "B"
+            board[row_guess][col_guess] = "X"
             return True
         else:
             print("\nCongratulations! You sank my battleship!\n")
-            board[row_guess][col_guess] = "B"
+            board[row_guess][col_guess] = "X"
     else:
-        board[row_guess][col_guess] = "X"
+        board[row_guess][col_guess] = "-"
         print("\nYou missed my battleship!")
         print("Please guess again\n")
     print_board(board)
