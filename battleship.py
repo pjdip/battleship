@@ -11,17 +11,17 @@ def print_greeting():
 # A function that takes in the board as an argument and prints it
 def print_board(board):
     print("\nHere is your board:\n")
-
-    for i in range(len(board) + 1):
-        print(str(i) + " ", end="")
-
-    print("")
-
+    # Prints the column header
+    for col in range(len(board) + 1):
+        # Built-in print function has end='\n' and sep='' parameters
+        # 'End' allows us to change the char a printed line ends with
+        print(col, end = " ")
+    print()
     row_count = 1
-
     for row in board:
-        print(str(row_count) + " " + " ".join(row))
+        print(row_count, " ".join(row))
         row_count += 1
+    print()
 
 # A function that takes in the dimension of the board
 # and returns the users guess of ship location
@@ -30,8 +30,8 @@ def get_guess(size_board):
     guess_row = int(input("Guess Row: "))
     guess_col = int(input("Guess Col: "))
     # If the guess is outside the dimension of the board, ask again
-    while guess_row not in range(size_board) or \
-        guess_col not in range(size_board):
+    while guess_row not in range(1, size_board + 1) or \
+        guess_col not in range(1, size_board + 1):
         print("\nOops, that's not even in the ocean.")
         print("Please guess again\n")
         guess_row = int(input("Guess Row: "))
@@ -49,7 +49,7 @@ def get_guess(size_board):
 def check_hit(board, list_guesses, list_ships, size_board):
     # Checking the most recent guess, or last guess in guess list
     guess = list_guesses[-1]
-    row_guess, col_guess = guess[0], guess[1]
+    row_guess, col_guess = guess[0] - 1, guess[1] - 1
     # If the guess shares a location with a ship
     if guess in list_ships:
         # Remove the ship from the list of ships
@@ -81,7 +81,7 @@ def would_continue():
 # Returns the number of ships
 #@todo could just ask user how many ships they want
 def ship_num(board_dimension):
-    print("\nYou will now choose a difficulty for the game")
+    print("You will now choose a difficulty for the game")
     print("Pick a decimal between 0 - 1 to decide how many ships there will be")
     print("Closer to 0 means less ships, closer to 1 means more ships\n")
     difficulty = float(input("Please choose a number between 0 and 1: "))
@@ -91,8 +91,8 @@ def ship_num(board_dimension):
 # A function that takes in the board and returns a random coord for a ship
 # within the dimensions of that board
 def find_new_ship(board):
-    ship_row = randint(0, len(board) - 1)
-    ship_col = randint(0, len(board[0]) - 1)
+    ship_row = randint(1, len(board))
+    ship_col = randint(1, len(board[0]))
     ship_location = [ship_row, ship_col]
     return ship_location
 
@@ -159,3 +159,5 @@ main()
 #   then can keep same while loop
 
 #@todo check that all inputs are proper and return input error to user when not
+
+#@todo silly easter egg: for board size n or greater, randomly generate "buried treasure"
