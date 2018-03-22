@@ -1,31 +1,41 @@
 from random import randint
+from pprint import pprint
 import sys
 
 # Let's the user know what this jam is all about
 def print_greeting():
-    print "\nThis is a game of battleship."
-    print "You will first decide the size of the board"
-    print "The board will be square, you choose the dimension"
+    print("\nThis is a game of battleship.")
+    print("You will first decide the size of the board")
+    print("The board will be square, you choose the dimension")
 
 # A function that takes in the board as an argument and prints it
 def print_board(board):
-    print "\nHere is your board:\n"
+    print("\nHere is your board:\n")
+
+    for i in range(len(board) + 1):
+        print(str(i) + " ", end="")
+
+    print("")
+
+    row_count = 1
+
     for row in board:
-        print " ".join(row)
+        print(str(row_count) + " " + " ".join(row))
+        row_count += 1
 
 # A function that takes in the dimension of the board
 # and returns the users guess of ship location
 # prompts the user for a guess as to location of ships
 def get_guess(size_board):
-    guess_row = int(raw_input("Guess Row: "))
-    guess_col = int(raw_input("Guess Col: "))
+    guess_row = int(input("Guess Row: "))
+    guess_col = int(input("Guess Col: "))
     # If the guess is outside the dimension of the board, ask again
     while guess_row not in range(size_board) or \
         guess_col not in range(size_board):
-        print "\nOops, that's not even in the ocean."
-        print "Please guess again\n"
-        guess_row = int(raw_input("Guess Row: "))
-        guess_col = int(raw_input("Guess Col: "))
+        print("\nOops, that's not even in the ocean.")
+        print("Please guess again\n")
+        guess_row = int(input("Guess Row: "))
+        guess_col = int(input("Guess Col: "))
     else:
         return [guess_row, guess_col]
 
@@ -46,23 +56,23 @@ def check_hit(board, list_guesses, list_ships, size_board):
         list_ships.remove(guess)
         # If there are no more ships
         if list_ships == []:
-            print "\nCongratulations! You sank all my ships! :P\n"
-            board[row_guess][col_guess] = "B"
+            print("\nCongratulations! You sank all my ships! :P\n")
+            board[row_guess][col_guess] = "X"
             return True
         else:
-            print "\nCongratulations! You sank my battleship!\n"
-            board[row_guess][col_guess] = "B"
+            print("\nCongratulations! You sank my battleship!\n")
+            board[row_guess][col_guess] = "X"
     else:
-        board[row_guess][col_guess] = "X"
-        print "\nYou missed my battleship!"
-        print "Please guess again\n"
+        board[row_guess][col_guess] = "-"
+        print("\nYou missed my battleship!")
+        print("Please guess again\n")
     print_board(board)
     print
 #    return board
 
 # A function that checks if the user wants to keep playing
 def would_continue():
-    to_continue = raw_input("Would you like to continue? respond Y or N: ")
+    to_continue = input("Would you like to continue? respond Y or N: ")
     if to_continue == "N" or to_continue == "n":
         sys.exit()
 
@@ -71,10 +81,10 @@ def would_continue():
 # Returns the number of ships
 #@todo could just ask user how many ships they want
 def ship_num(board_dimension):
-    print "\nYou will now choose a difficulty for the game"
-    print "Pick a decimal between 0 - 1 to decide how many ships there will be"
-    print "Closer to 0 means less ships, closer to 1 means more ships\n"
-    difficulty = float(raw_input("Please choose a number between 0 and 1: "))
+    print("\nYou will now choose a difficulty for the game")
+    print("Pick a decimal between 0 - 1 to decide how many ships there will be")
+    print("Closer to 0 means less ships, closer to 1 means more ships\n")
+    difficulty = float(input("Please choose a number between 0 and 1: "))
     num_ships = difficulty * (board_dimension ** 2)
     return int(num_ships)
 
@@ -96,13 +106,13 @@ def ship_list(no_ships, board):
         while ship_location in list_of_ships:
             ship_location = find_new_ship(board)
         list_of_ships.append(ship_location)
-    print list_of_ships
+    print(list_of_ships)
     return list_of_ships
 
 def main():
 
     print_greeting()
-    board_size = int(raw_input("\nSize of board please: "))
+    board_size = int(input("\nSize of board please: "))
 
     board = []
     for x in range(0, board_size):
@@ -111,7 +121,7 @@ def main():
     print_board(board)
 
     ship_no = ship_num(board_size)
-#    print ship_no
+#    print(ship_no)
 
     shipems = ship_list(ship_no, board)
 
@@ -123,13 +133,13 @@ def main():
 
     while guess_hit != True:
         would_continue()
-        print "Your guesses thus far: ", guesses
-        print "The ship locations are: ", shipems
+        print("Your guesses thus far: ", guesses)
+        print("The ship locations are: ", shipems)
         print
         guess_new = get_guess(board_size)
         while guess_new in guesses:
-            print "\nYou guessed that one already."
-            print "Please guess again\n"
+            print("\nYou guessed that one already.")
+            print("Please guess again\n")
             guess_new = get_guess(board_size)
         guesses.append(guess_new)
         guess_hit = check_hit(board, guesses, shipems, board_size)
