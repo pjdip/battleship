@@ -90,7 +90,7 @@ def ship_num(board_dimension):
 
 # A function that takes in the board and returns a random coord for a ship
 # within the dimensions of that board
-def find_new_ship(board):
+def find_rand_ship(board):
     ship_row = randint(1, len(board))
     ship_col = randint(1, len(board[0]))
     ship_location = [ship_row, ship_col]
@@ -101,10 +101,10 @@ def find_new_ship(board):
 def ship_list(no_ships, board):
     list_of_ships = []
     for ship in range(no_ships):
-        ship_location = find_new_ship(board)
+        ship_location = find_rand_ship(board)
         # Makes sure there aren't multiple ships in same location
         while ship_location in list_of_ships:
-            ship_location = find_new_ship(board)
+            ship_location = find_rand_ship(board)
         list_of_ships.append(ship_location)
     print(list_of_ships)
     return list_of_ships
@@ -112,39 +112,70 @@ def ship_list(no_ships, board):
 def main():
 
     print_greeting()
-    board_size = int(input("\nSize of board please: "))
+#    board_size = int(input("\nSize of board please: "))
+    board_size = 10
 
     board = []
+    cpu_board = []
     for x in range(0, board_size):
         board.append(["O"] * board_size)
+        cpu_board.append(["O"] * board_size)
 
     print_board(board)
+    print_board(cpu_board)
 
-    ship_no = ship_num(board_size)
+    ship_no = int(input("Your board is 10x10. How many ships would you like?: "))
+#    ship_no = ship_num(board_size)
 #    print(ship_no)
 
     shipems = ship_list(ship_no, board)
+    cpu_shipems = ship_list(ship_no, cpu_board)
 
     guesses = []
     guess = get_guess(board_size)
     guesses.append(guess)
 
+    cpu_guesses = []
+    cpu_guess = find_rand_ship(cpu_board)
+    cpu_guesses.append(cpu_guess)
+
+
     guess_hit = check_hit(board, guesses, shipems, board_size)
+    guess_hit_cpu = check_hit(cpu_board, cpu_guesses, cpu_shipems, board_size)
+
+    if guess_hit_cpu == True:
+        print("Game Over\n")
+        print("The computer sank all of your ships")
+        print("fuck off")
+        sys.exit()
 
     while guess_hit != True:
         would_continue()
         print("Your guesses thus far: ", guesses)
         print("The ship locations are: ", shipems)
+        print("CPU guesses thus far: ", cpu_guesses)
+        print("CPU ship locations are: ", cpu_shipems)
         print
+
         guess_new = get_guess(board_size)
+        cpu_new_guess = find_rand_ship(cpu_board)
+
+        while cpu_new_guess in cpu_guesses:
+            cpu_new_guess = find_rand_ship(cpu_board)
+
         while guess_new in guesses:
             print("\nYou guessed that one already.")
             print("Please guess again\n")
             guess_new = get_guess(board_size)
+
         guesses.append(guess_new)
         guess_hit = check_hit(board, guesses, shipems, board_size)
 
+        cpu_guesses.append(cpu_new_guess)
+        guess_hit_cpu = check_hit(cpu_board, cpu_guesses, cpu_shipems, board_size)
+
     print_board(board)
+    print_board(cpu_board)
     print
 
 main()
