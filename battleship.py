@@ -63,6 +63,7 @@ def check_hit(board, list_guesses, list_ships, size_board, player):
                 print("Isn't victory sweet?\n")
                 board[row_guess][col_guess] = "X"
                 return True
+                sys.exit()
             else:
                 print("\nCongratulations! You sank my battleship!\n")
                 board[row_guess][col_guess] = "X"
@@ -182,6 +183,11 @@ def main():
         if guess_hit_cpu == True:
             print("\nGAME OVER\n")
             print("The computer sank all of your ships\n")
+            print_board(cpu_board)
+            print("The CPU guess were: ", cpu_guesses)
+            print("The remaining CPU ship locations are: ", cpu_shipems)
+            print
+
             sys.exit()
 
         if would_quit() == True:
@@ -189,8 +195,8 @@ def main():
 
         print("\nYour guesses thus far: ", guesses)
         print("Your ship locations are: ", player_shipems)
-        print("CPU guesses thus far: ", cpu_guesses)
-        print("CPU ship locations are: ", cpu_shipems)
+#        print("CPU guesses thus far: ", cpu_guesses)
+#        print("CPU ship locations are: ", cpu_shipems)
         print
 
         guess_new = ship_from_user(board_size, guess_ship)
