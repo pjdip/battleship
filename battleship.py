@@ -37,8 +37,10 @@ def ship_from_user(size_board, directions):
         print("Please try again\n")
         guess_row = int(input("Row: "))
         guess_col = int(input("Col: "))
-    else:
-        return [guess_row, guess_col]
+    return [guess_row, guess_col]
+
+#    else:
+#        return [guess_row, guess_col]
 
 # A function that takes in 4 arguments
 # 1) the board itself 2) a list containing all coordinates that have been guessed
@@ -59,17 +61,19 @@ def check_hit(board, list_guesses, list_ships, size_board, player):
             list_ships.remove(guess)
             # If there are no more ships
             if list_ships == []:
-                print("\nCongratulations! You sank all enemy ships! :P\n")
-                print("Isn't victory sweet?\n")
+#                print("\nCongratulations! You sank all enemy ships! :P\n")
+#                print("Isn't victory sweet?\n")
                 board[row_guess][col_guess] = "X"
                 return True
-                sys.exit()
+#                sys.exit()
             else:
-                print("\nCongratulations! You sank an enemy ship!\n")
+#                print("\nCongratulations! You sank an enemy ship!\n")
                 board[row_guess][col_guess] = "X"
+                return "hit"
         else:
             board[row_guess][col_guess] = "-"
-            print("\nYou missed my battleship!")
+            return "miss"
+#            print("\nYou missed my battleship!")
             #print("Please guess again\n")
 #        print_board(board)
 
@@ -127,6 +131,9 @@ def ship_list(no_ships, board):
     #print("this is the list of ships", list_of_ships)
     return list_of_ships
 
+# a function that takes in the size of the board and the number of ships
+# prompts the user to create the desired number of ships
+# returns a list of the users ships
 def get_player_ships(ship_no, board_size):
     player_ships = []
     place_ship = "\nPlease choose the location for a ship: "
@@ -138,27 +145,34 @@ def get_player_ships(ship_no, board_size):
             print("Please place another ship\n")
             ship_loc = ship_from_user(board_size, place_ship)
         player_ships.append(ship_loc)
-    print("\nHere is your list of secret ships: ", player_ships)
+#    print("\nHere is your list of secret ships: ", player_ships)
+    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
     return player_ships
 
+# a function that takes in the ship list, guess list and board of a player
+# prints this out so the player can see their progress thus far
 def player_status(ships, guesses, board):
     print("\nYour guesses thus far: ", guesses)
     print("Your remaining ship locations are: ", ships)
-    print("Your board state looks as follows:")
     print_board(board)
     print("""\n'-' represents a location you have guessed that was a miss
 'x' represents a location you have guessed that was a hit
 'O' represents a location you have not yet guessed\n""")
 
-
+# a function that takes in a players name and passcode
+# will not continue game until the correct passcode is entered
 def player_check(player, passcode):
     print("\nIt is now %s's turn" % (player))
     pass_input = input("Please input the passcode for %s: " % (player))
     while pass_input != passcode:
         pass_input = input("\nThat passcode was incorrect, please try again: ")
+    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
     print("\n\nWelcome to your turn %s" % (player))
     return True
 
+# function takes in a guess, the list of previous guesses, and the board dimensions
+# prompts the user if they have already made that guess
+# returns a guess from the user that has not already been guessed
 def previous_guess(guess, guess_list, board_size):
     guess_ship = "\nPlease guess the location of an enemy ship: "
     while guess in guess_list:
@@ -167,15 +181,57 @@ Please guess again\n""")
         guess = ship_from_user(board_size, guess_ship)
     return guess
 
+# function takes in player names and status of last guess
+# prints situation at end of turn
+# returns true if a win condition has been met
+def end_turn_report(player1, player2, p1guess, p2guess):
+    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
+    print("Welcome to the end of turn report")
+    print("Here are the results:")
+
+    if p1guess == "hit":
+        print("\nCongratulations! %s sank %s's ship!\n" % (player1, player2))
+    elif p1guess == "miss":
+        print("\nSorry bro :( %s missed %s's battleship!\n" % (player1, player2))
+
+    if p2guess == "hit":
+        print("\nCongratulations! %s sank %s's ship!\n" % (player2, player1))
+    elif p2guess == "miss":
+        print("\nSorry bro :( %s missed %s's battleship!\n" % (player2, player1))
+
+    if p1guess == True and p2guess != True:
+        print("\nWinner, winner, chicken dinner")
+        print("looks like %s takes the prize" % (player1))
+        print("Isn't victory sweet?")
+        return True
+
+    if p2guess == True and p1guess != True:
+        print("\nWinner, winner, chicken dinner")
+        print("looks like %s takes the prize" % (player2))
+        print("Isn't victory sweet?")
+        return True
+
+    if p1guess == True and p2guess == True:
+        print("\nlooks like a draw, kido's")
+        return True
+
 def main():
 
     print_greeting()
     board_size = int(input("\nPlease decide the dimension of board: "))
+    print("\nYour board is", board_size, "x", board_size)
+    print("There are", board_size ** 2, "available spaces for ships.")
+    ship_no = int(input("How many ships would you like?: "))
+#    ship_no = ship_num(board_size)
+#    print(ship_no)
+
 # for n players ask number of players and then do for loop creating player object for each person
     player_1 = input("\nPlease enter the name of the first player: ")
     passcode_1 = input("Please enter a code you will use when passing turns: ")
+    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
     player_2 = input("\nPlease enter the name of the second player: ")
     passcode_2 = input("Please enter a code you will use when passing turns: ")
+    print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n")
 
 #    board_size = 10
     player1_board = []
@@ -190,22 +246,18 @@ def main():
 #    print_board(board)
 #    print_board(cpu_board)
 
-    print("\nYour board is", board_size, "x", board_size)
-    print("There are", board_size ** 2, "available spaces for ships.")
-    ship_no = int(input("How many ships would you like?: "))
-#    ship_no = ship_num(board_size)
-#    print(ship_no)
-
 #    shipems = ship_list(ship_no, board)
-#    player_check(passcode_1)
+
+    #checks to make sure it is player 1, prompts player to hide their ships
     player_check(player_1, passcode_1)
-    print("You will now choose the location for their ships")
+    print("You will now choose the location for your ships")
     player1_shipems = get_player_ships(ship_no, board_size)
 
     player_check(player_2, passcode_2)
-    print("You will now choose the location for their ships")
+    print("You will now choose the location for your ships")
     player2_shipems = get_player_ships(ship_no, board_size)
 
+    #returns to player 1 turn. prompts for a guess, checks for a hit
     player_check(player_1, passcode_1)
     player1_guesses = []
     player1_guess = ship_from_user(board_size, guess_ship)
@@ -218,9 +270,11 @@ def main():
     player2_guesses.append(player2_guess)
     guess2_hit = check_hit(player2_board, player2_guesses, player1_shipems, board_size, True)
 
+    end_check = end_turn_report(player_1, player_2, guess1_hit, guess2_hit)
 #    guess_hit = check_hit(board, guesses, shipems, board_size, True)
 
-    while guess1_hit != True and guess2_hit != True:
+    while end_check != True:
+#    while guess1_hit != True and guess2_hit != True:
 
         """
         if guess_hit_cpu == True:
@@ -238,6 +292,7 @@ def main():
             sys.exit()
         """
 
+        #player 1 turn, displays current status, requests a new guess, checks for a hit
         player_check(player_1, passcode_1)
         player_status(player1_shipems, player1_guesses, player1_board)
         new_guess1 = ship_from_user(board_size, guess_ship)
@@ -257,10 +312,10 @@ def main():
         player_status(player2_shipems, player2_guesses, player2_board)
         new_guess2 = ship_from_user(board_size, guess_ship)
         guess2_new = previous_guess(new_guess2, player2_guesses, board_size)
-
         player2_guesses.append(guess2_new)
         guess2_hit = check_hit(player2_board, player2_guesses, player1_shipems, board_size, True)
 
+        end_check = end_turn_report(player_1, player_2, guess1_hit, guess2_hit)
 
 #    print_board(board)
 #    print_board(cpu_board)
@@ -268,15 +323,6 @@ def main():
 
 main()
 
-#@todo have checkhit check every ship in ship list to see if it is a hit
-
 #@todo insert message to continue looking for ships after hitting the first
-
-#@todo remove ships from ship list as they are hit
-#@todo run program until ship list is empty
-#   change condition for checkhit to return true when shiplist is empty.
-#   then can keep same while loop
-
 #@todo check that all inputs are proper and return input error to user when not
-
 #@todo silly easter egg: for board size n or greater, randomly generate "buried treasure"
